@@ -27,6 +27,7 @@ public class Solver {
       answer = s.nextLine();
     } while (!answer.equals("y"));
 
+    s.close();
     System.out.println("Here is your solution:");
     board.start();
   }
