@@ -41,7 +41,7 @@ def pre_process_image(img, skip_dilate=False):
 
 def find_corners_of_largest_polygon(img):
     """Finds the 4 extreme corners of the largest contour in the image."""
-    _, contours, h = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)  # Find contours
+    contours, h = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)  # Find contours
     contours = sorted(contours, key=cv2.contourArea, reverse=True)  # Sort by area, descending
     polygon = contours[0]  # Largest image
 
@@ -249,23 +249,3 @@ def parse_grid(path):
     digits = get_digits(cropped, squares, 30)
     return digits
     show_digits(digits)
-
-
-def main():
-    GRID_PATH = 'tests/grid.png'
-    digits = parse_grid(GRID_PATH)
-    show_digits(digits)
-    clf = joblib.load('classifier.pkl')
-
-    grid = []
-    for d in digits:
-        d = cv2.resize(d, (36,36))
-        num = clf.predict(np.reshape(d, (1,-1)))
-        grid.append(num)
-
-    grid = np.reshape(flat_grid, (9,9))
-    print(grid)
-
-
-if __name__ == '__main__':
-    main()
